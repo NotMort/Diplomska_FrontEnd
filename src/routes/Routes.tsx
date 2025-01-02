@@ -16,22 +16,39 @@ type AppRoute = RouteProps & {
 
 /* Public routes */
 const Home = lazy(() => import('pages/Home'))
-
+const Info = lazy(() => import('pages/Info'))
 /* Private routes */
 
 /* Restricted routes */
-
+const Login = lazy(() => import('pages/Login'))
+const Register = lazy(() => import('pages/Register'))
 /* Error routes */
 const Page404 = lazy(() => import('pages/Page404'))
 
 export const AppRoutes: AppRoute[] = [
   // Restricted Routes
+  {
+    type: RouteType.PUBLIC,
+    path: '/login',
+    children: <Login />,
+  },
+  {
+    type: RouteType.PUBLIC,
+    path: '/signup',
+    children: <Register />,
+  },
   // Private Routes
+
   // Public Routes
   {
     type: RouteType.PUBLIC,
     path: '/',
     children: <Home />,
+  },
+  {
+    type: RouteType.PUBLIC,
+    path: '/info',
+    children: <Info />,
   },
   // 404 Error
   {

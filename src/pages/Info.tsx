@@ -1,12 +1,12 @@
 import Layout from 'components/ui/Layout'
 import { FC } from 'react'
 
-const Home: FC = () => {
+const Info: FC = () => {
   return (
     <Layout>
-      <div>Home</div>
+      <div>Info</div>
     </Layout>
   )
 }
 
-export default Home
+export default Info

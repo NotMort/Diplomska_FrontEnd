@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 const Topbar: FC = () => {
-  return <div></div>
+  return <div>topbar</div>
 }
 
 export default Topbar

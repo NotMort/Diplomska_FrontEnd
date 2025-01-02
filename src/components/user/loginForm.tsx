@@ -10,7 +10,7 @@ import { StatusCode } from 'constants/errorConstants'
 import authStore from 'stores/auth.store'
 export const LoginForm: FC = () => {
   const navigate = useNavigate()
-  const { handleSubmit, errors, control, reset } = useLoginForm()
+  const { handleSubmit, errors, control } = useLoginForm()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -35,7 +35,7 @@ export const LoginForm: FC = () => {
           control={control}
           name="email"
           render={({ field }) => (
-            <Form.Group>
+            <Form.Group className="mb-3">
               <FormLabel htmlFor="email">Email</FormLabel>
               <input
                 {...field}
@@ -44,12 +44,12 @@ export const LoginForm: FC = () => {
                 aria-label="Email"
                 aria-describedby="email"
                 className={
-                  errors.email ? 'from-control is-invalid' : 'form-control'
+                  errors.email ? 'form-control is-invalid' : 'form-control'
                 }
               />
               {errors.email && (
                 <div className="invalid-feedback text-danger">
-                  {errors.email?.message}
+                  {errors.email.message}
                 </div>
               )}
             </Form.Group>
@@ -59,28 +59,28 @@ export const LoginForm: FC = () => {
           control={control}
           name="password"
           render={({ field }) => (
-            <Form.Group>
-              <FormLabel htmlFor="email">Email</FormLabel>
+            <Form.Group className="mb-3">
+              <FormLabel htmlFor="password">Password</FormLabel>
               <input
                 {...field}
                 type="password"
-                placeholder="example@gmail.com"
+                placeholder="******"
                 aria-label="Password"
                 aria-describedby="password"
                 className={
-                  errors.email ? 'from-control is-invalid' : 'form-control'
+                  errors.password ? 'form-control is-invalid' : 'form-control'
                 }
               />
-              {errors.email && (
+              {errors.password && (
                 <div className="invalid-feedback text-danger">
-                  {errors.email?.message}
+                  {errors.password.message}
                 </div>
               )}
             </Form.Group>
           )}
         />
         <div className="d-flex justify-content-between align-items-center mb-2">
-          <p className="mb-0"> Don{"'"}t have an account yet</p>
+          <p className="mb-0">Don{"'"}t have an account yet?</p>
           <Link className="text-decoration-none text-end" to={routes.SIGNUP}>
             Create account
           </Link>
@@ -89,7 +89,6 @@ export const LoginForm: FC = () => {
           Login
         </Button>
       </Form>
-
       {showError && (
         <ToastContainer className="p-3" position="top-end">
           <Toast onClose={() => setShowError(false)} show={showError}>
