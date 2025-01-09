@@ -29,3 +29,23 @@
   width: 50px !important;
   height: 50px !important;
 }
+html,
+body {
+  height: 100%;
+}
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.layout-container {
+  flex: 1; /* Allows the content area to grow and push the footer down */
+}
+
+/* Footer Styling */
+footer {
+  background-color: #333; /* Dark background for contrast */
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+}

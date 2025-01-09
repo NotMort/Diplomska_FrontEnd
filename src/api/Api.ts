@@ -24,3 +24,4 @@ export async function apiRequest<D = Record<string, unknown>, R = unknown>(
   }
 }
 export * from 'api/User'
+export * from 'api/Artwork'

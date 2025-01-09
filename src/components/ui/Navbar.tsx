@@ -65,12 +65,17 @@ const Navbar: FC = () => {
                     Info
                   </NavLink>
                 </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link text-dark mx-2"
+                    to={routes.ABOUT}
+                  >
+                    About
+                  </NavLink>
+                </li>
                 {authStore.user ? (
                   <li className="nav-item">
-                    <Button
-                      className="btn btn-outline-danger mx-2"
-                      onClick={signout}
-                    >
+                    <Button className="btn  mx-2" onClick={signout}>
                       Signout
                     </Button>
                   </li>
@@ -94,6 +99,15 @@ const Navbar: FC = () => {
                     </li>
                   </>
                 )}
+                <li className="nav-item">
+                  <select
+                    id="language-selector"
+                    className="form-select form-select-sm bg-light border-0 rounded-pill mx-2"
+                  >
+                    <option value="en">English</option>
+                    <option value="sl">Slovenian</option>
+                  </select>
+                </li>
               </ul>
             </div>
           </div>
