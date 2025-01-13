@@ -36,7 +36,7 @@ export enum apiRoutes {
 
   // Artworks endpoints
   FETCH_ARTWORKS = '/artworks',
-  FETCH_ARTWORK_BY_ID = '/artworks/:id',
+  FETCH_ARTWORK_BY_ID = '/artworks/',
   CREATE_ARTWORK = '/artworks',
   UPDATE_ARTWORK = '/artworks/:id',
   DELETE_ARTWORK = '/artworks/:id',

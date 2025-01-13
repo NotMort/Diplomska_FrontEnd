@@ -18,3 +18,5 @@ export const uploadAvatar = async (formData: FormData, id: string) =>
     `${apiRoutes.UPLOAD_USER_AVATAR}/${id}`,
     formData,
   )
+export const fetchAuthUser = async () =>
+  apiRequest<undefined, UserType>('get', apiRoutes.FETCH_AUTH_USER)

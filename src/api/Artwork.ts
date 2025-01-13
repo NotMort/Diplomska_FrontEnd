@@ -1,12 +1,12 @@
-import { apiRoutes } from 'constants/apiConstants'
+import { ArtworkType } from 'models/artwork'
 import { apiRequest } from './Api'
-import { LoginUserFields } from 'hooks/react-hook-form/useLogin'
-import { UserType } from 'models/auth'
-import { RegisterUserFields } from 'hooks/react-hook-form/useRegister'
+import { apiRoutes } from 'constants/apiConstants'
 
-export async function getFeaturedArtwork() {
-  return apiRequest('get', '/artworks/featured')
-}
-export async function getArtworkById(id: string) {
-  return apiRequest('get', `/artworks/${id}`)
-}
+export const fetchArtworks = async () =>
+  apiRequest<undefined, ArtworkType[]>('get', apiRoutes.FETCH_ARTWORKS)
+
+export const fetchArtworkById = async (artworkId: string) =>
+  apiRequest<undefined, ArtworkType>(
+    'get',
+    apiRoutes.FETCH_ARTWORK_BY_ID + `${artworkId}`,
+  )

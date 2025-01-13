@@ -19,7 +19,9 @@ const Home = lazy(() => import('pages/Home'))
 const Info = lazy(() => import('pages/Info'))
 const About = lazy(() => import('pages/About'))
 /* Private routes */
-
+const Profile = lazy(() => import('pages/restricted/Profile'))
+const AddArtwork = lazy(() => import('pages/restricted/Artwork/AddArtwork'))
+const ArtworkPage = lazy(() => import('pages/ArtworkPage'))
 /* Restricted routes */
 const Login = lazy(() => import('pages/Login'))
 const Register = lazy(() => import('pages/Register'))
@@ -39,12 +41,26 @@ export const AppRoutes: AppRoute[] = [
     children: <Register />,
   },
   // Private Routes
-
+  {
+    type: RouteType.PRIVATE,
+    path: '/profile',
+    children: <Profile />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/addartwork',
+    children: <AddArtwork />,
+  },
   // Public Routes
   {
     type: RouteType.PUBLIC,
     path: '/',
     children: <Home />,
+  },
+  {
+    type: RouteType.PUBLIC,
+    path: '/artwork/:artworkId',
+    children: <ArtworkPage />,
   },
   {
     type: RouteType.PUBLIC,

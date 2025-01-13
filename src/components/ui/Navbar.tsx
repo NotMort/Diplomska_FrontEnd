@@ -74,11 +74,29 @@ const Navbar: FC = () => {
                   </NavLink>
                 </li>
                 {authStore.user ? (
-                  <li className="nav-item">
-                    <Button className="btn  mx-2" onClick={signout}>
-                      Signout
-                    </Button>
-                  </li>
+                  <>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link text-dark mx-2"
+                        to={routes.PROFILE}
+                      >
+                        Profile
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link text-dark mx-2"
+                        to={routes.ADD_ARTWORK}
+                      >
+                        art+
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <Button className="btn  mx-2" onClick={signout}>
+                        Signout
+                      </Button>
+                    </li>
+                  </>
                 ) : (
                   <>
                     <li className="nav-item">
