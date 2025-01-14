@@ -1,10 +1,14 @@
 import { FC, useEffect, useState } from 'react'
 import Layout from 'components/ui/Layout'
+import List from 'components/artwork/List'
 import * as API from 'api/Api'
 import { UserType } from 'models/auth'
+import { ArtworkType } from 'models/artwork'
 
 const Profile: FC = () => {
   const [user, setUser] = useState<UserType | null>(null)
+  const [artworks, setArtworks] = useState<ArtworkType[]>([])
+  const [loadingArtworks, setLoadingArtworks] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -21,7 +25,19 @@ const Profile: FC = () => {
       }
     }
 
+    const getUserArtworks = async () => {
+      try {
+        const response = await API.fetchUserArtworks()
+        setArtworks(response.data)
+      } catch (err) {
+        setError('Failed to load user artworks. Please try again later.')
+      } finally {
+        setLoadingArtworks(false)
+      }
+    }
+
     getUserProfile()
+    getUserArtworks()
   }, [])
 
   if (error) {
@@ -35,7 +51,7 @@ const Profile: FC = () => {
   if (!user) {
     return (
       <Layout>
-        <p>Loading...</p>
+        <p>Loading profile...</p>
       </Layout>
     )
   }
@@ -58,6 +74,16 @@ const Profile: FC = () => {
             style={{ width: '100px', borderRadius: '50%' }}
           />
         </p>
+      )}
+
+      <h2>Your Artworks</h2>
+      {loadingArtworks && <p>Loading artworks...</p>}
+      {!loadingArtworks && artworks.length === 0 && <p>No artworks found.</p>}
+      {!loadingArtworks && artworks.length > 0 && (
+        <List
+          artworks={artworks}
+          onCardClick={(artwork) => console.log(artwork)}
+        />
       )}
     </Layout>
   )
