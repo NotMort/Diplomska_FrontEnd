@@ -42,4 +42,6 @@ export enum apiRoutes {
   DELETE_ARTWORK = '/artworks/:id',
   FETCH_ARTWORK_BY_CATEGORY = '/artworks/category/:category',
   FETCH_ARTWORK_BY_TAG = '/artworks/tag/:tag',
+
+  CREATE_COMMENT = '/comments',
 }

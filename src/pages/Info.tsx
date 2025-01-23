@@ -35,19 +35,42 @@ const Info: FC = () => {
 
         <section className="mb-5">
           <h2 className="text-secondary">Types of Copyright Licenses</h2>
-          <p>Below are common types of copyright licenses:</p>
+          <p>Below are details about common types of copyright licenses:</p>
           <ul>
             <li>
-              <strong>All Rights Reserved:</strong> The creator retains all
-              rights, and usage requires explicit permission.
+              <strong>CC BY:</strong> This license allows others to distribute,
+              remix, adapt, and build upon the work, even commercially, as long
+              as they give credit to the creator.
             </li>
             <li>
-              <strong>Creative Commons:</strong> A range of licenses that allow
-              creators to share work under specific conditions.
+              <strong>CC BY-SA:</strong> Similar to CC BY, but adaptations must
+              be licensed under identical terms.
+            </li>
+            <li>
+              <strong>CC BY-NC:</strong> Others can remix, adapt, and build upon
+              the work non-commercially, and although new works must also
+              acknowledge the creator, they dont have to license derivative
+              works under the same terms.
+            </li>
+            <li>
+              <strong>CC BY-ND:</strong> This license allows redistribution,
+              commercial and non-commercial, as long as the work remains
+              unchanged and in whole, with credit to the creator.
+            </li>
+            <li>
+              <strong>GPL:</strong> The GNU General Public License is a free,
+              copyleft license for software that ensures end users can run,
+              study, share, and modify the software.
+            </li>
+            <li>
+              <strong>Copyright:</strong> A traditional license where all rights
+              are reserved to the creator, requiring explicit permission for
+              usage.
             </li>
             <li>
               <strong>Public Domain:</strong> Works that are free to use without
-              restrictions, often due to expiration of copyright.
+              restrictions, often due to expiration of copyright or the creator
+              voluntarily placing them in the public domain.
             </li>
           </ul>
         </section>
@@ -76,6 +99,15 @@ const Info: FC = () => {
                 rel="noopener noreferrer"
               >
                 Creative Commons
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.gnu.org/licenses/gpl-3.0.en.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GNU General Public License
               </a>
             </li>
             <li>

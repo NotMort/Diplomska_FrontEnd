@@ -3,28 +3,37 @@ import { FC, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import * as API from 'api/Api'
 import Layout from 'components/ui/Layout'
+
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { CommentType } from 'models/comment'
+import ArtworkDetails from 'components/artwork/Details'
+import Comments from 'components/comments/Comments'
 
 const ArtworkPage: FC = () => {
   const { artworkId } = useParams<{ artworkId: string }>()
   const [artwork, setArtwork] = useState<ArtworkType | null>(null)
+  const [comments, setComments] = useState<CommentType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchArtwork = async () => {
+    const fetchData = async () => {
       try {
         if (!artworkId) throw new Error('Artwork ID is missing')
-        const response = await API.fetchArtworkById(artworkId)
-        setArtwork(response.data)
+        const [artworkResponse, commentsResponse] = await Promise.all([
+          API.fetchArtworkById(artworkId),
+          API.fetchCommentsByArtworkId(artworkId),
+        ])
+        setArtwork(artworkResponse.data)
+        setComments(commentsResponse.data)
       } catch (err) {
-        console.error('Error fetching artwork:', err)
+        console.error('Error fetching artwork or comments:', err)
         setError('Failed to load artwork. Please try again later.')
       } finally {
         setLoading(false)
       }
     }
-    fetchArtwork()
+    fetchData()
   }, [artworkId])
 
   if (loading) {
@@ -50,30 +59,13 @@ const ArtworkPage: FC = () => {
   return (
     <Layout>
       <div className="container mt-5">
-        <div className="row">
-          <div className="col-md-6">
-            <img
-              src={artwork.image_path}
-              alt={artwork.title}
-              className="img-fluid rounded shadow"
-            />
-          </div>
-          <div className="col-md-6">
-            <h1 className="mb-3">{artwork.title}</h1>
-            <p className="text-muted">Category: {artwork.category}</p>
-            <p>{artwork.description}</p>
-            <div className="d-flex flex-wrap gap-2 mb-3">
-              {artwork.tags?.map((tag, index) => (
-                <span key={index} className="badge bg-secondary">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <a href={artwork.file_path} className="btn btn-primary" download>
-              Download Artwork
-            </a>
-          </div>
-        </div>
+        <ArtworkDetails artwork={artwork} />
+        <hr className="my-5" />
+        <Comments
+          artworkId={artworkId!}
+          comments={comments}
+          setComments={setComments}
+        />
       </div>
     </Layout>
   )
