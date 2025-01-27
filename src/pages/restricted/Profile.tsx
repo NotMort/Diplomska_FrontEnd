@@ -28,6 +28,7 @@ const Profile: FC = () => {
     const getUserArtworks = async () => {
       try {
         const response = await API.fetchUserArtworks()
+        console.log(response)
         setArtworks(response.data)
       } catch (err) {
         setError('Failed to load user artworks. Please try again later.')
