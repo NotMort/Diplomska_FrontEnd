@@ -1,13 +1,10 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Button, Form, FormLabel } from 'react-bootstrap'
-import { Controller } from 'react-hook-form'
-
+import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
-import { CreateUpdateArtworkFields } from 'models/artwork'
+import { useNavigate, useParams } from 'react-router-dom'
 import * as API from 'api/Api'
-import authStore from 'stores/auth.store'
-import { useNavigate } from 'react-router-dom'
-import { useCreateArtworkForm } from 'hooks/react-hook-form/useCreateUpdateArtwork'
+import { CreateUpdateArtworkFields, ArtworkType } from 'models/artwork'
 
 const tagOptions = [
   { value: 'nature', label: 'Nature' },
@@ -17,38 +14,64 @@ const tagOptions = [
   { value: 'still-life', label: 'Still Life' },
 ]
 
-const AddArtworkForm: FC = () => {
-  const { handleSubmit, control, reset, errors } = useCreateArtworkForm()
-  const [error, setError] = useState<string | null>(null)
+const UpdateArtworkForm: FC = () => {
+  const { id } = useParams<{ id: string }>()
   const [selectedTags, setSelectedTags] = useState<
     { value: string; label: string }[]
   >([])
+  const [error, setError] = useState<string | null>(null)
+  const [artwork, setArtwork] = useState<ArtworkType | null>(null)
   const navigate = useNavigate()
 
-  const onSubmit = handleSubmit(async (data: CreateUpdateArtworkFields) => {
-    if (!authStore.user) {
-      setError('You must be logged in to submit artwork.')
-      return
-    }
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<CreateUpdateArtworkFields>()
 
+  useEffect(() => {
+    const fetchArtwork = async () => {
+      try {
+        if (!id) {
+          setError('Artwork ID is missing.')
+          return
+        }
+        const response = await API.fetchArtworkById(id)
+        setArtwork(response.data)
+        setSelectedTags(
+          response.data.tags.map((tag: string) => ({ value: tag, label: tag })),
+        )
+        reset(response.data)
+      } catch (err: any) {
+        console.error('Error fetching artwork:', err)
+        setError('Failed to load artwork. Please try again.')
+      }
+    }
+    fetchArtwork()
+  }, [id, reset])
+
+  const onSubmit = handleSubmit(async (data: CreateUpdateArtworkFields) => {
     try {
+      if (!id) {
+        setError('Artwork ID is missing.')
+        return
+      }
       const payload = {
         ...data,
-        user_id: authStore.user.id,
         tags: selectedTags.map((tag) => tag.value),
       }
-      console.log(payload)
-      await API.addArtwork(payload)
-      reset()
-      setSelectedTags([])
+      await API.updateArtwork(id, payload)
+      navigate(`/artworks/${id}`)
     } catch (err: any) {
-      console.error('Error adding artwork:', err.response?.data || err.message)
-      setError(
-        err.response?.data?.message ||
-          'Failed to add artwork. Please try again.',
-      )
+      console.error('Error updating artwork:', err)
+      setError('Failed to update artwork. Please try again.')
     }
   })
+
+  if (!artwork) {
+    return <p>Loading artwork...</p>
+  }
 
   return (
     <Form onSubmit={onSubmit} className="mt-4">
@@ -180,10 +203,10 @@ const AddArtworkForm: FC = () => {
       {error && <p className="text-danger mt-2">{error}</p>}
 
       <Button type="submit" className="btn btn-primary">
-        Submit Artwork
+        Update Artwork
       </Button>
     </Form>
   )
 }
 
-export default AddArtworkForm
+export default UpdateArtworkForm

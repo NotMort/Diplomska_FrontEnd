@@ -1,7 +1,7 @@
 import Layout from 'components/ui/Layout'
 import { LoginForm } from 'components/user/loginForm'
 
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 const Login: FC = () => {
   return (

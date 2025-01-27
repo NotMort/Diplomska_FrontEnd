@@ -14,3 +14,12 @@ export const fetchUserArtworks = async () =>
   apiRequest<undefined, ArtworkType[]>('get', '/auth/artworks')
 export const addArtwork = async (data: CreateUpdateArtworkFields) =>
   apiRequest<CreateUpdateArtworkFields, void>('post', '/artworks', data)
+export const updateArtwork = async (
+  artworkId: string,
+  data: CreateUpdateArtworkFields,
+) =>
+  apiRequest<CreateUpdateArtworkFields, void>(
+    'patch',
+    `/artworks/${artworkId}`,
+    data,
+  )
