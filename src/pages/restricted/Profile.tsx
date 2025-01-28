@@ -8,7 +8,9 @@ import { ArtworkType } from 'models/artwork'
 const Profile: FC = () => {
   const [user, setUser] = useState<UserType | null>(null)
   const [artworks, setArtworks] = useState<ArtworkType[]>([])
+  const [favoriteArtworks, setFavoriteArtworks] = useState<ArtworkType[]>([])
   const [loadingArtworks, setLoadingArtworks] = useState<boolean>(true)
+  const [loadingFavorites, setLoadingFavorites] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -28,7 +30,6 @@ const Profile: FC = () => {
     const getUserArtworks = async () => {
       try {
         const response = await API.fetchUserArtworks()
-        console.log(response)
         setArtworks(response.data)
       } catch (err) {
         setError('Failed to load user artworks. Please try again later.')
@@ -37,8 +38,29 @@ const Profile: FC = () => {
       }
     }
 
+    const getUserFavorites = async () => {
+      try {
+        const favoriteIdsResponse = await API.fetchUserFavorites()
+        const favoriteIds = favoriteIdsResponse.data.map(
+          (favorite: { artwork_id: string }) => favorite.artwork_id,
+        )
+
+        const favoriteDetails = await Promise.all(
+          favoriteIds.map((id: string) =>
+            API.fetchArtworkById(id).then((res) => res.data),
+          ),
+        )
+        setFavoriteArtworks(favoriteDetails)
+      } catch (err) {
+        setError('Failed to load favorite artworks. Please try again later.')
+      } finally {
+        setLoadingFavorites(false)
+      }
+    }
+
     getUserProfile()
     getUserArtworks()
+    getUserFavorites()
   }, [])
 
   if (error) {
@@ -83,6 +105,18 @@ const Profile: FC = () => {
       {!loadingArtworks && artworks.length > 0 && (
         <List
           artworks={artworks}
+          onCardClick={(artwork) => console.log(artwork)}
+        />
+      )}
+
+      <h2>Favorited Artworks</h2>
+      {loadingFavorites && <p>Loading favorite artworks...</p>}
+      {!loadingFavorites && favoriteArtworks.length === 0 && (
+        <p>No favorite artworks found.</p>
+      )}
+      {!loadingFavorites && favoriteArtworks.length > 0 && (
+        <List
+          artworks={favoriteArtworks}
           onCardClick={(artwork) => console.log(artwork)}
         />
       )}
