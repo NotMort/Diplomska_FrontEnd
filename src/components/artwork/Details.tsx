@@ -1,11 +1,49 @@
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { ArtworkType } from 'models/artwork'
+import * as API from 'api/Api'
+import authStore from 'stores/auth.store'
 
 interface ArtworkDetailsProps {
   artwork: ArtworkType
 }
 
 const ArtworkDetails: FC<ArtworkDetailsProps> = ({ artwork }) => {
+  const [downloadCount, setDownloadCount] = useState<number>(0)
+
+  const fetchDownloadCount = async () => {
+    try {
+      const response = await API.fetchDownloadCount(artwork.id)
+      if (response?.data) {
+        setDownloadCount(response.data.count)
+      }
+    } catch (err) {
+      console.error('Error fetching download count:', err)
+    }
+  }
+
+  useEffect(() => {
+    fetchDownloadCount()
+  }, [artwork.id])
+
+  const handleDownload = async () => {
+    if (!authStore.user) {
+      alert('You must be logged in to download this artwork.')
+      return
+    }
+
+    try {
+      await API.createDownload({
+        user_id: authStore.user.id,
+        artwork_id: artwork.id,
+      })
+      setDownloadCount((prevCount) => prevCount + 1) // Increment the count
+      console.log('Download recorded successfully.')
+    } catch (err) {
+      console.error('Error recording download:', err)
+      alert('Failed to record download. Please try again.')
+    }
+  }
+
   return (
     <div className="row">
       <div className="col-md-6">
@@ -26,8 +64,18 @@ const ArtworkDetails: FC<ArtworkDetailsProps> = ({ artwork }) => {
             </span>
           ))}
         </div>
-        <a href={artwork.file_path} className="btn btn-primary" download>
-          Download Artwork
+        <p>
+          <strong>Downloads:</strong> {downloadCount}
+        </p>
+        <a
+          href={authStore.user ? artwork.file_path : undefined}
+          className={`btn btn-primary ${!authStore.user ? 'disabled' : ''}`}
+          download={authStore.user ? true : undefined}
+          onClick={authStore.user ? handleDownload : undefined}
+          role="button"
+          aria-disabled={!authStore.user}
+        >
+          {authStore.user ? 'Download Artwork' : 'Login to Download'}
         </a>
       </div>
     </div>
