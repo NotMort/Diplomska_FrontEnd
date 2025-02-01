@@ -19,8 +19,16 @@ export async function apiRequest<D = Record<string, unknown>, R = unknown>(
     })
     return response
   } catch (error: any) {
+    if (error.response?.status === 401) {
+      handleAutoLogout()
+    }
     return error.response
   }
+}
+function handleAutoLogout() {
+  document.cookie = 'access_token=; Max-Age=0; path=/'
+  localStorage.removeItem('user')
+  window.location.href = '/login'
 }
 export * from 'api/User'
 export * from 'api/Artwork'

@@ -39,6 +39,7 @@ const Navbar: FC = () => {
             >
               ArtisticWorks
             </NavLink>
+
             <button
               className="navbar-toggler"
               type="button"
