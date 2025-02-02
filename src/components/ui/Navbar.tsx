@@ -1,18 +1,18 @@
-import Toast from 'react-bootstrap/Toast'
-import { routes } from 'constants/routesConstants'
-import { FC, useState } from 'react'
-import Button from 'react-bootstrap/Button'
-import ToastContainer from 'react-bootstrap/ToastContainer'
+import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-
+import Button from 'react-bootstrap/Button'
+import Toast from 'react-bootstrap/Toast'
+import ToastContainer from 'react-bootstrap/ToastContainer'
 import authStore from 'stores/auth.store'
 import { StatusCode } from 'constants/errorConstants'
 import * as API from 'api/Api'
+import { routes } from 'constants/routesConstants'
 
-const Navbar: FC = () => {
+const Navbar = () => {
   const navigate = useNavigate()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
+  const [isDropdownOpen, setDropdownOpen] = useState(false)
 
   const signout = async () => {
     const response = await API.signout()
@@ -40,21 +40,17 @@ const Navbar: FC = () => {
               ArtisticWorks
             </NavLink>
 
+            {/* Mobile Toggle Button */}
             <button
               className="navbar-toggler"
               type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
+              onClick={() => setDropdownOpen(!isDropdownOpen)}
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div
-              className="collapse navbar-collapse justify-content-end"
-              id="navbarNav"
-            >
+
+            {/* Navbar Links (Desktop) */}
+            <div className="collapse navbar-collapse justify-content-end d-none d-lg-flex">
               <ul className="navbar-nav">
                 <li className="nav-item">
                   <NavLink className="nav-link text-dark mx-2" to={routes.HOME}>
@@ -93,7 +89,7 @@ const Navbar: FC = () => {
                       </NavLink>
                     </li>
                     <li className="nav-item">
-                      <Button className="btn  mx-2" onClick={signout}>
+                      <Button className="btn mx-2" onClick={signout}>
                         Signout
                       </Button>
                     </li>
@@ -118,17 +114,102 @@ const Navbar: FC = () => {
                     </li>
                   </>
                 )}
-                <li className="nav-item">
-                  <select
-                    id="language-selector"
-                    className="form-select form-select-sm bg-light border-0 rounded-pill mx-2"
-                  >
-                    <option value="en">English</option>
-                    <option value="sl">Slovenian</option>
-                  </select>
-                </li>
               </ul>
             </div>
+
+            {/* Mobile Dropdown (when toggled) */}
+            {isDropdownOpen && (
+              <div className="w-100 bg-white shadow p-3 d-lg-none">
+                <ul className="navbar-nav">
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link text-dark"
+                      to={routes.HOME}
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      Home
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link text-dark"
+                      to={routes.INFO}
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      Info
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link text-dark"
+                      to={routes.ABOUT}
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      About
+                    </NavLink>
+                  </li>
+                  {authStore.user ? (
+                    <>
+                      <li className="nav-item">
+                        <NavLink
+                          className="nav-link text-dark"
+                          to={routes.PROFILE}
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          Profile
+                        </NavLink>
+                      </li>
+                      <li className="nav-item">
+                        <NavLink
+                          className="nav-link text-dark"
+                          to={routes.ADD_ARTWORK}
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          art+
+                        </NavLink>
+                      </li>
+                      <li className="nav-item">
+                        <button
+                          className="btn btn-link text-dark nav-link"
+                          onClick={signout}
+                        >
+                          Signout
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="nav-item">
+                        <NavLink
+                          className="nav-link text-dark"
+                          to={routes.LOGIN}
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          Login
+                        </NavLink>
+                      </li>
+                      <li className="nav-item">
+                        <NavLink
+                          className="nav-link text-dark"
+                          to={routes.SIGNUP}
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          Signup
+                        </NavLink>
+                      </li>
+                    </>
+                  )}
+                </ul>
+                <hr />
+                <select
+                  id="language-selector"
+                  className="form-select form-select-sm bg-light border-0 rounded-pill"
+                >
+                  <option value="en">English</option>
+                  <option value="sl">Slovenian</option>
+                </select>
+              </div>
+            )}
           </div>
         </nav>
       </header>
