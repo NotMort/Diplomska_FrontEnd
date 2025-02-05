@@ -16,11 +16,10 @@ export enum apiRoutes {
 
   // Licenses endpoints
   FETCH_LICENSES = '/licenses',
-  FETCH_LICENSE_BY_ID = '/licenses/:id',
-  CREATE_LICENSE = '/licenses',
-  UPDATE_LICENSE = '/licenses/:id',
-  DELETE_LICENSE = '/licenses/:id',
-  FETCH_LICENSE_BY_TYPE = '/licenses/type/:license_type',
+  FETCH_LICENSE_BY_ID = '/licenses/',
+  ADD_LICENSE = '/licenses',
+  UPDATE_LICENSE = '/licenses/',
+  DELETE_LICENSE = '/licenses/',
 
   // Favorites endpoints
   FETCH_FAVORITES = '/favorites',

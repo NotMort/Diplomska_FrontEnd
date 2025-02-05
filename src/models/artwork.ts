@@ -20,4 +20,5 @@ export interface CreateUpdateArtworkFields {
   category: '2D' | '3D' | 'photo' | 'audio' | 'video'
   tags?: string[]
   user_id: string
+  license_id?: string
 }

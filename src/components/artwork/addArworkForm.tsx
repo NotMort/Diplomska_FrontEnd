@@ -38,9 +38,12 @@ const AddArtworkForm: FC = () => {
         tags: selectedTags.map((tag) => tag.value),
       }
       console.log(payload)
-      await API.addArtwork(payload)
+      const response = await API.addArtwork(payload)
       reset()
       setSelectedTags([])
+      if (response?.data) {
+        navigate(`/artworks/${response.data.id}/add-license`)
+      }
     } catch (err: any) {
       console.error('Error adding artwork:', err.response?.data || err.message)
       setError(

@@ -85,7 +85,7 @@ const Navbar = () => {
                         className="nav-link text-dark mx-2"
                         to={routes.ADD_ARTWORK}
                       >
-                        art+
+                        Add Art
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -165,7 +165,7 @@ const Navbar = () => {
                           to={routes.ADD_ARTWORK}
                           onClick={() => setDropdownOpen(false)}
                         >
-                          art+
+                          Add Art
                         </NavLink>
                       </li>
                       <li className="nav-item">

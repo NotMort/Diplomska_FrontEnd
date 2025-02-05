@@ -17,6 +17,7 @@ const Profile: FC = () => {
     const getUserProfile = async () => {
       try {
         const response = await API.fetchAuthUser()
+        console.log('Fetched User:', response.data) // Debugging
         if (response?.status === 200) {
           setUser(response.data)
         } else {
