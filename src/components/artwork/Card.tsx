@@ -5,19 +5,18 @@ const Card: FC<{ artwork: ArtworkType; onClick: () => void }> = ({
   artwork,
   onClick,
 }) => {
+  const fallbackImage = '/images/fallback.jpg'
+
   return (
-    <div
-      className="card h-100 shadow-sm"
-      style={{ width: '100%' }}
-      onClick={onClick}
-    >
+    <div className="card shadow-sm artwork-card" onClick={onClick}>
       <img
-        src={artwork.thumbnail_path || artwork.image_path}
+        src={artwork.thumbnail_path || artwork.image_path || fallbackImage}
         className="card-img-top"
         alt={artwork.title}
+        onError={(e) => (e.currentTarget.src = fallbackImage)}
       />
-      <div className="card-body d-flex flex-column">
-        <h5 className="card-title">{artwork.title}</h5>
+      <div className="card-body p-2">
+        <h6 className="card-title text-center">{artwork.title}</h6>
       </div>
     </div>
   )

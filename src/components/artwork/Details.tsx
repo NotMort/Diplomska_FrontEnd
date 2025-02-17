@@ -9,7 +9,7 @@ interface ArtworkDetailsProps {
 
 const ArtworkDetails: FC<ArtworkDetailsProps> = ({ artwork }) => {
   const [downloadCount, setDownloadCount] = useState<number>(0)
-
+  const fallbackImage = '/images/fallback.jpg'
   const fetchDownloadCount = async () => {
     try {
       const response = await API.fetchDownloadCount(artwork.id)
@@ -36,7 +36,7 @@ const ArtworkDetails: FC<ArtworkDetailsProps> = ({ artwork }) => {
         user_id: authStore.user.id,
         artwork_id: artwork.id,
       })
-      setDownloadCount((prevCount) => prevCount + 1) // Increment the count
+      setDownloadCount((prevCount) => prevCount + 1)
       console.log('Download recorded successfully.')
     } catch (err) {
       console.error('Error recording download:', err)
@@ -51,6 +51,7 @@ const ArtworkDetails: FC<ArtworkDetailsProps> = ({ artwork }) => {
           src={artwork.image_path}
           alt={artwork.title}
           className="img-fluid rounded shadow"
+          onError={(e) => (e.currentTarget.src = fallbackImage)}
         />
       </div>
       <div className="col-md-6">

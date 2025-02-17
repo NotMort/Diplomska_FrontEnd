@@ -19,7 +19,6 @@ const onSignup = () => {
   document.body.id = 'signup-page'
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const callbacks: any = {
   '/': [onHome],
   '/login': [onLogin],

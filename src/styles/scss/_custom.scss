@@ -27,3 +27,22 @@ body {
 .layout-container {
   flex: 1;
 }
+.artwork-card {
+  width: 220px;
+  margin-left: 2.5%;
+  margin-bottom: 2%;
+  height: auto;
+  cursor: pointer;
+  flex: 0 0 auto;
+  display: inline-block;
+}
+
+.artwork-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-body {
+  font-size: 14px;
+}

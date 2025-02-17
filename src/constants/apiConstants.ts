@@ -9,9 +9,9 @@ export enum apiRoutes {
   FETCH_USERS = '/users',
   FETCH_USER_BY_ID = '/users/:id',
   CREATE_USER = '/users',
-  UPDATE_USER = '/users/:id',
-  DELETE_USER = '/users/:id',
-  UPLOAD_USER_AVATAR = '/users/upload/:id',
+  UPDATE_USER = '/users/',
+  DELETE_USER = '/users/',
+  UPLOAD_USER_AVATAR = '/users/upload',
   FETCH_USER_BY_EMAIL = '/users/email/:email',
 
   // Licenses endpoints

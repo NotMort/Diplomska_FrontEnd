@@ -17,7 +17,7 @@ const Profile: FC = () => {
     const getUserProfile = async () => {
       try {
         const response = await API.fetchAuthUser()
-        console.log('Fetched User:', response.data) // Debugging
+
         if (response?.status === 200) {
           setUser(response.data)
         } else {
@@ -93,9 +93,10 @@ const Profile: FC = () => {
         <p>
           <strong>Avatar:</strong>
           <img
-            src={user.avatar}
+            src={`http://localhost:8080/files/avatars/${user.avatar}`}
             alt="User Avatar"
             style={{ width: '100px', borderRadius: '50%' }}
+            onError={(e) => (e.currentTarget.src = '/default-avatar.png')}
           />
         </p>
       )}

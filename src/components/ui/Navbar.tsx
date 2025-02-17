@@ -201,13 +201,6 @@ const Navbar = () => {
                   )}
                 </ul>
                 <hr />
-                <select
-                  id="language-selector"
-                  className="form-select form-select-sm bg-light border-0 rounded-pill"
-                >
-                  <option value="en">English</option>
-                  <option value="sl">Slovenian</option>
-                </select>
               </div>
             )}
           </div>

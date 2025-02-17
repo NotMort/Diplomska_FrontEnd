@@ -24,7 +24,10 @@ export const RegisterForm: FC = () => {
   const [fileError, setFileError] = useState(false)
 
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
-    if (!file) return
+    if (!file) {
+      setFileError(true)
+      return
+    }
     const response = await API.register(data)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
@@ -48,6 +51,8 @@ export const RegisterForm: FC = () => {
       } else {
         const formData = new FormData()
         formData.append('avatar', file, file.name)
+        console.log('Uploading file:', file.name)
+
         const fileResponse = await API.uploadAvatar(
           formData,
           loginResponse.data.id,

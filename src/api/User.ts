@@ -13,10 +13,6 @@ export const login = async (data: LoginUserFields) =>
 export const register = async (data: RegisterUserFields) =>
   apiRequest<RegisterUserFields, UserType>('post', apiRoutes.REGISTER, data)
 export const uploadAvatar = async (formData: FormData, id: string) =>
-  apiRequest<FormData, void>(
-    'post',
-    `${apiRoutes.UPLOAD_USER_AVATAR}/${id}`,
-    formData,
-  )
+  apiRequest<FormData, void>('patch', `/users/upload/${id}`, formData)
 export const fetchAuthUser = async () =>
   apiRequest<undefined, UserType>('get', apiRoutes.FETCH_AUTH_USER)

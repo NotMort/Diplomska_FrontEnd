@@ -13,9 +13,9 @@ const List: FC<{
 
   return (
     <div className="container mt-4">
-      <div className="row">
+      <div className="d-flex flex-wrap justify-content-start align-items-start gap-3">
         {artworks.map((artwork) => (
-          <div className="col-md-4" key={artwork.id}>
+          <div key={artwork.id} className="artwork-item">
             <Card artwork={artwork} onClick={() => onCardClick(artwork)} />
           </div>
         ))}

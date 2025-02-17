@@ -8,13 +8,14 @@ export const fetchArtworks = async () =>
 export const fetchArtworkById = async (artworkId: string) =>
   apiRequest<undefined, ArtworkType>(
     'get',
-    apiRoutes.FETCH_ARTWORK_BY_ID + `${artworkId}`,
+    `${apiRoutes.FETCH_ARTWORK_BY_ID}${artworkId}`,
   )
+
 export const fetchUserArtworks = async () =>
   apiRequest<undefined, ArtworkType[]>('get', '/auth/artworks')
 
 export const addArtwork = async (data: CreateUpdateArtworkFields) =>
-  apiRequest<CreateUpdateArtworkFields, void>('post', '/artworks', data)
+  apiRequest<CreateUpdateArtworkFields, ArtworkType>('post', '/artworks', data)
 
 export const updateArtwork = async (
   artworkId: string,
@@ -25,3 +26,36 @@ export const updateArtwork = async (
     `/artworks/${artworkId}`,
     data,
   )
+
+export const uploadArtworkThumbnail = async (artworkId: string, file: File) => {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  return apiRequest<FormData, void>(
+    'patch',
+    `/artworks/upload/thumbnail/${artworkId}`,
+    formData,
+  )
+}
+
+export const uploadArtworkImage = async (artworkId: string, file: File) => {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  return apiRequest<FormData, void>(
+    'patch',
+    `/artworks/upload/image/${artworkId}`,
+    formData,
+  )
+}
+
+export const uploadArtworkFile = async (artworkId: string, file: File) => {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  return apiRequest<FormData, void>(
+    'patch',
+    `/artworks/upload/file/${artworkId}`,
+    formData,
+  )
+}

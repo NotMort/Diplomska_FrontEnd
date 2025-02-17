@@ -4,7 +4,7 @@ import { Controller } from 'react-hook-form'
 
 import Select from 'react-select'
 import { CreateUpdateArtworkFields } from 'models/artwork'
-import * as API from 'api/Api'
+import * as API from 'api/Artwork'
 import authStore from 'stores/auth.store'
 import { useNavigate } from 'react-router-dom'
 import { useCreateArtworkForm } from 'hooks/react-hook-form/useCreateUpdateArtwork'
@@ -23,6 +23,9 @@ const AddArtworkForm: FC = () => {
   const [selectedTags, setSelectedTags] = useState<
     { value: string; label: string }[]
   >([])
+  const [file, setFile] = useState<File | null>(null)
+  const [image, setImage] = useState<File | null>(null)
+  const [thumbnail, setThumbnail] = useState<File | null>(null)
   const navigate = useNavigate()
 
   const onSubmit = handleSubmit(async (data: CreateUpdateArtworkFields) => {
@@ -32,24 +35,33 @@ const AddArtworkForm: FC = () => {
     }
 
     try {
-      const payload = {
+      if (!image || !file) {
+        setError('You must upload an image and a file.')
+        return
+      }
+      const payload: CreateUpdateArtworkFields = {
         ...data,
         user_id: authStore.user.id,
         tags: selectedTags.map((tag) => tag.value),
       }
-      console.log(payload)
+
       const response = await API.addArtwork(payload)
+      if (!response?.data?.id) {
+        throw new Error('Failed to create artwork')
+      }
+
+      const artworkId = response.data.id
+
+      if (thumbnail) await API.uploadArtworkThumbnail(artworkId, thumbnail)
+      if (image) await API.uploadArtworkImage(artworkId, image)
+      if (file) await API.uploadArtworkFile(artworkId, file)
+
       reset()
       setSelectedTags([])
-      if (response?.data) {
-        navigate(`/artworks/${response.data.id}/add-license`)
-      }
-    } catch (err: any) {
-      console.error('Error adding artwork:', err.response?.data || err.message)
-      setError(
-        err.response?.data?.message ||
-          'Failed to add artwork. Please try again.',
-      )
+      navigate(`/artworks/${artworkId}`)
+    } catch (err) {
+      console.error('Error adding artwork:', err)
+      setError('Failed to add artwork. Please try again.')
     }
   })
 
@@ -94,60 +106,34 @@ const AddArtworkForm: FC = () => {
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <FormLabel htmlFor="file_path">File Path</FormLabel>
-        <Controller
-          name="file_path"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="file"
-              {...field}
-              id="file_path"
-              className={`form-control ${errors.file_path ? 'is-invalid' : ''}`}
-            />
-          )}
+        <FormLabel htmlFor="file_path">Upload File</FormLabel>
+        <input
+          type="file"
+          id="file_path"
+          className="form-control"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
         />
-        {errors.file_path && (
-          <div className="invalid-feedback">{errors.file_path.message}</div>
-        )}
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <FormLabel htmlFor="image_path">Image Path</FormLabel>
-        <Controller
-          name="image_path"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="file"
-              {...field}
-              id="image_path"
-              className={`form-control ${
-                errors.image_path ? 'is-invalid' : ''
-              }`}
-            />
-          )}
+        <FormLabel htmlFor="image_path">Upload Image</FormLabel>
+        <input
+          type="file"
+          id="image_path"
+          className="form-control"
+          onChange={(e) => setImage(e.target.files?.[0] || null)}
         />
-        {errors.image_path && (
-          <div className="invalid-feedback">{errors.image_path.message}</div>
-        )}
       </Form.Group>
 
       <Form.Group className="mb-3">
         <FormLabel htmlFor="thumbnail_path">
-          Thumbnail Path (Optional)
+          Upload Thumbnail (Optional)
         </FormLabel>
-        <Controller
-          name="thumbnail_path"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="file"
-              {...field}
-              id="thumbnail_path"
-              className="form-control"
-            />
-          )}
+        <input
+          type="file"
+          id="thumbnail_path"
+          className="form-control"
+          onChange={(e) => setThumbnail(e.target.files?.[0] || null)}
         />
       </Form.Group>
 
@@ -174,9 +160,9 @@ const AddArtworkForm: FC = () => {
           isMulti
           options={tagOptions}
           value={selectedTags}
-          onChange={(selected: { value: string; label: string }[] | null) =>
-            setSelectedTags(selected ?? [])
-          }
+          onChange={(
+            selected: readonly { value: string; label: string }[] | null,
+          ) => setSelectedTags(selected ? [...selected] : [])}
         />
       </Form.Group>
 
