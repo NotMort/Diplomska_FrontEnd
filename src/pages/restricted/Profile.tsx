@@ -17,7 +17,6 @@ const Profile: FC = () => {
     const getUserProfile = async () => {
       try {
         const response = await API.fetchAuthUser()
-
         if (response?.status === 200) {
           setUser(response.data)
         } else {
@@ -64,6 +63,43 @@ const Profile: FC = () => {
     getUserFavorites()
   }, [])
 
+  // ✅ Handle Artwork Deletion (With Confirmation)
+  const handleDeleteArtwork = async (artworkId: string) => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this artwork? This action cannot be undone.',
+    )
+    if (!confirmed) return
+
+    try {
+      await API.deleteArtwork(artworkId)
+      setArtworks((prev) => prev.filter((artwork) => artwork.id !== artworkId))
+    } catch (err) {
+      alert('Failed to delete artwork. Please try again.')
+    }
+  }
+
+  // ✅ Handle Favorite Click (With Confirmation)
+  const handleFavoriteClick = async (artworkId: string) => {
+    if (!user) return
+
+    const isFavorited = favoriteArtworks.some((art) => art.id === artworkId)
+    if (isFavorited) {
+      const confirmed = window.confirm(
+        'Do you want to remove this artwork from favorites?',
+      )
+      if (!confirmed) return
+
+      try {
+        await API.removeFavorite(user.id, artworkId)
+        setFavoriteArtworks((prev) =>
+          prev.filter((artwork) => artwork.id !== artworkId),
+        )
+      } catch (err) {
+        alert('Failed to remove from favorites. Please try again.')
+      }
+    }
+  }
+
   if (error) {
     return (
       <Layout>
@@ -105,10 +141,7 @@ const Profile: FC = () => {
       {loadingArtworks && <p>Loading artworks...</p>}
       {!loadingArtworks && artworks.length === 0 && <p>No artworks found.</p>}
       {!loadingArtworks && artworks.length > 0 && (
-        <List
-          artworks={artworks}
-          onCardClick={(artwork) => console.log(artwork)}
-        />
+        <List artworks={artworks} onCardClick={handleDeleteArtwork} />
       )}
 
       <h2>Favorited Artworks</h2>
@@ -117,10 +150,7 @@ const Profile: FC = () => {
         <p>No favorite artworks found.</p>
       )}
       {!loadingFavorites && favoriteArtworks.length > 0 && (
-        <List
-          artworks={favoriteArtworks}
-          onCardClick={(artwork) => console.log(artwork)}
-        />
+        <List artworks={favoriteArtworks} onCardClick={handleFavoriteClick} />
       )}
     </Layout>
   )

@@ -58,7 +58,7 @@ const AddArtworkForm: FC = () => {
 
       reset()
       setSelectedTags([])
-      navigate(`/artworks/${artworkId}`)
+      navigate(`/artworks/${response.data.id}/add-license`)
     } catch (err) {
       console.error('Error adding artwork:', err)
       setError('Failed to add artwork. Please try again.')

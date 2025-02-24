@@ -30,11 +30,6 @@ const Footer: FC = () => {
                   Copyright Information
                 </NavLink>
               </li>
-              <li>
-                <NavLink className="text-light" to="/contact">
-                  Contact Us
-                </NavLink>
-              </li>
             </ul>
           </div>
 

@@ -59,3 +59,5 @@ export const uploadArtworkFile = async (artworkId: string, file: File) => {
     formData,
   )
 }
+export const deleteArtwork = async (artworkId: string) =>
+  apiRequest<undefined, void>('delete', `/artworks/${artworkId}`)

@@ -48,7 +48,7 @@ const ArtworkDetails: FC<ArtworkDetailsProps> = ({ artwork }) => {
     <div className="row">
       <div className="col-md-6">
         <img
-          src={artwork.image_path}
+          src={`http://localhost:8080/${artwork.image_path}`}
           alt={artwork.title}
           className="img-fluid rounded shadow"
           onError={(e) => (e.currentTarget.src = fallbackImage)}

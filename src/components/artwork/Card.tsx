@@ -10,7 +10,11 @@ const Card: FC<{ artwork: ArtworkType; onClick: () => void }> = ({
   return (
     <div className="card shadow-sm artwork-card" onClick={onClick}>
       <img
-        src={artwork.thumbnail_path || artwork.image_path || fallbackImage}
+        src={
+          `http://localhost:8080/${artwork.thumbnail_path}` ||
+          `http://localhost:8080/${artwork.image_path}` ||
+          fallbackImage
+        }
         className="card-img-top"
         alt={artwork.title}
         onError={(e) => (e.currentTarget.src = fallbackImage)}
