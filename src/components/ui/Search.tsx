@@ -12,26 +12,40 @@ const tagOptions = [
   { value: 'still-life', label: 'Still Life' },
 ]
 
+const licenseOptions = [
+  { value: 'CC BY', label: 'CC BY' },
+  { value: 'CC BY-SA', label: 'CC BY-SA' },
+  { value: 'CC BY-NC', label: 'CC BY-NC' },
+  { value: 'CC BY-ND', label: 'CC BY-ND' },
+  { value: 'GPL', label: 'GPL' },
+  { value: 'Copyright', label: 'Copyright' },
+  { value: 'Public Domain', label: 'Public Domain' },
+]
+
 interface SearchArtworkProps {
   artworks: ArtworkType[]
   setFilteredArtworks: (artworks: ArtworkType[]) => void
   setTitle: (title: string) => void
+  setLicense: (license: string) => void
 }
 
 export default function SearchArtwork({
   artworks,
   setFilteredArtworks,
   setTitle,
+  setLicense,
 }: SearchArtworkProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedTags, setSelectedTags] = useState<
     { value: string; label: string }[]
   >([])
+  const [selectedLicense, setSelectedLicense] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
     let filtered = artworks
+
     if (selectedCategory) {
       filtered = filtered.filter(
         (artwork) =>
@@ -41,6 +55,7 @@ export default function SearchArtwork({
     } else {
       setTitle('Artworks')
     }
+
     if (selectedTags.length > 0) {
       const selectedTagValues = selectedTags.map((tag) => tag.value)
       filtered = filtered.filter(
@@ -49,16 +64,27 @@ export default function SearchArtwork({
           selectedTagValues.every((tag) => artwork.tags?.includes(tag)),
       )
     }
+
     if (searchTerm) {
       filtered = filtered.filter((artwork) =>
         artwork.title.toLowerCase().includes(searchTerm.toLowerCase()),
       )
     }
+
+    if (selectedLicense) {
+      filtered = filtered.filter(
+        (artwork) =>
+          artwork.license?.license_type.toLowerCase() ===
+          selectedLicense.toLowerCase(),
+      )
+    }
+
     setFilteredArtworks(filtered)
   }, [
     searchTerm,
     selectedCategory,
     selectedTags,
+    selectedLicense,
     artworks,
     setFilteredArtworks,
     setTitle,
@@ -74,6 +100,7 @@ export default function SearchArtwork({
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-2 border rounded mb-2"
         />
+
         <select
           className="w-full p-2 border rounded"
           value={selectedCategory}
@@ -86,6 +113,7 @@ export default function SearchArtwork({
           <option value="audio">Audio</option>
           <option value="video">Video</option>
         </select>
+
         <Select
           isMulti
           options={tagOptions}
@@ -95,6 +123,23 @@ export default function SearchArtwork({
           }
           className="mt-2"
         />
+
+        <select
+          className="w-full p-2 border rounded mt-2"
+          value={selectedLicense}
+          onChange={(e) => {
+            const license = e.target.value
+            setSelectedLicense(license)
+            setLicense(license)
+          }}
+        >
+          <option value="">All Licenses</option>
+          {licenseOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   )

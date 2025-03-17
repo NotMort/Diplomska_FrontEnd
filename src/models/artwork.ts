@@ -1,3 +1,5 @@
+import { License } from './License'
+
 export interface ArtworkType {
   id: string
   title: string
@@ -9,6 +11,7 @@ export interface ArtworkType {
   tags?: string[]
   createdAt: string
   updatedAt: string
+  license?: License
 }
 
 export interface CreateUpdateArtworkFields {

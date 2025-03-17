@@ -68,6 +68,33 @@ const ArtworkDetails: FC<ArtworkDetailsProps> = ({ artwork }) => {
         <p>
           <strong>Downloads:</strong> {downloadCount}
         </p>
+        <p>
+          <strong>License:</strong>{' '}
+          {artwork.license
+            ? artwork.license.license_type
+            : 'No License Available'}
+        </p>
+        {artwork.license && (
+          <div className="mb-3">
+            <p>
+              <strong>Description:</strong> {artwork.license.description}
+            </p>
+            <ul>
+              <li>
+                <strong>Commercial Use:</strong>{' '}
+                {artwork.license.commercial_use ? 'Allowed' : 'Not Allowed'}
+              </li>
+              <li>
+                <strong>Modification Allowed:</strong>{' '}
+                {artwork.license.modification_allowed ? 'Yes' : 'No'}
+              </li>
+              <li>
+                <strong>Attribution Required:</strong>{' '}
+                {artwork.license.attribution_required ? 'Yes' : 'No'}
+              </li>
+            </ul>
+          </div>
+        )}
         <a
           href={authStore.user ? artwork.file_path : undefined}
           className={`btn btn-primary ${!authStore.user ? 'disabled' : ''}`}

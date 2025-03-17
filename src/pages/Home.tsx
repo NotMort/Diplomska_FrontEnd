@@ -12,6 +12,8 @@ const Home = () => {
   const [title, setTitle] = useState('Artworks')
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [license, setLicense] = useState<string>('')
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -34,12 +36,23 @@ const Home = () => {
     navigate(`/artwork/${artwork.id}`)
   }
 
+  useEffect(() => {
+    if (license) {
+      setFilteredArtworks(
+        artworks.filter((art) => art.license?.license_type === license),
+      )
+    } else {
+      setFilteredArtworks(artworks)
+    }
+  }, [license, artworks])
+
   return (
     <Layout>
       <SearchArtwork
         artworks={artworks}
         setFilteredArtworks={setFilteredArtworks}
         setTitle={setTitle}
+        setLicense={setLicense}
       />
       <h1>{title}</h1>
       {loading && <p>Loading artworks...</p>}
